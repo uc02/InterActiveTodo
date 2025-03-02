@@ -30,4 +30,19 @@ app.post("/todos", async(req, res) => {
   const newTodo = new Todo({ text: req.body.text, completed: false });
   await newTodo.save();
   res.json(newTodo);
-})
+});
+
+app.put("/todos/:id", async(req,res) => {
+  const todo = await Todo.findById(req.params.id);
+  todo.completed = !todo.completed;
+  await todo.save();
+  res.json(todo);
+});
+
+app.deleted("/todos/:id", async(req, res) => {
+  await Todo.findByIdAndDelete(req.params.id);
+  res.json({ message: "Todo Deletec"});
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`server running on port ${PORT}`));
